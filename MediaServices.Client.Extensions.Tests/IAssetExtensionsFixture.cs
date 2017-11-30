@@ -79,7 +79,7 @@ namespace MediaServices.Client.Extensions.Tests
         {
             try
             {
-                this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+                this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
                 this.asset.GetMetadata(null);
             }
@@ -97,7 +97,7 @@ namespace MediaServices.Client.Extensions.Tests
         {
             try
             {
-                this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+                this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
                 var originLocator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -120,7 +120,7 @@ namespace MediaServices.Client.Extensions.Tests
                 var asset2 = this.context.Assets.Create("empty", AssetCreationOptions.None);
                 var sasLocator = this.context.Locators.Create(LocatorType.Sas, asset2, AccessPermissions.Read, TimeSpan.FromDays(1));
 
-                this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+                this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
                 try
                 {
@@ -145,7 +145,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldReturnNullGetAssetMetadataIfAssetDoesNotContainMetadataFile()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var assetMetadata = this.asset.GetMetadata();
 
@@ -156,7 +156,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\smallwmv1.wmv")]
         public void ShouldGetAssetMetadata()
         {
-            this.asset = this.context.Assets.CreateFromFile("smallwmv1.wmv", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\smallwmv1.wmv", AssetCreationOptions.None);
 
             var job = this.context.Jobs.CreateWithSingleTask(
                 MediaProcessorNames.MediaEncoderStandard,
@@ -228,7 +228,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\smallwmv1.wmv")]
         public void ShouldGetAssetMetadataWithSpecificLocator()
         {
-            this.asset = this.context.Assets.CreateFromFile("smallwmv1.wmv", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\smallwmv1.wmv", AssetCreationOptions.None);
 
             var job = this.context.Jobs.CreateWithSingleTask(
                 MediaProcessorNames.MediaEncoderStandard,
@@ -316,7 +316,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\smallwmv1.wmv")]
         public void ShouldGenerateAssetFilesFromBlobStorage()
         {
-            var fileName = "smallwmv1.wmv";
+            var fileName = @"Media\smallwmv1.wmv";
 
             // Create empty asset.
             this.asset = this.context.Assets.Create(Path.GetFileNameWithoutExtension(fileName), AssetCreationOptions.None);
@@ -330,7 +330,7 @@ namespace MediaServices.Client.Extensions.Tests
 
             // Upload a blob directly to the asset container.
             var blob = assetContainer.GetBlockBlobReference(fileName);
-            blob.UploadFromStream(File.OpenRead(fileName));
+            blob.UploadFromStreamAsync(File.OpenRead(fileName)).Wait();
 
             // Refresh the asset reference.
             this.asset = this.context.Assets.Where(a => a.Id == this.asset.Id).First();
@@ -344,7 +344,7 @@ namespace MediaServices.Client.Extensions.Tests
             this.asset = this.context.Assets.Where(a => a.Id == this.asset.Id).First();
 
             Assert.AreEqual(1, this.asset.AssetFiles.Count());
-            Assert.AreEqual(fileName, this.asset.AssetFiles.ToArray()[0].Name);
+            Assert.AreEqual("smallwmv1.wmv", this.asset.AssetFiles.ToArray()[0].Name);
         }
 
         [TestMethod]
@@ -413,9 +413,9 @@ namespace MediaServices.Client.Extensions.Tests
 
                 Assert.AreEqual(3, Directory.GetFiles(downloadFolderPath).Length);
 
-                AssertDownloadedFile(originalFolderPath, downloadFolderPath, "smallwmv1.wmv");
-                AssertDownloadedFile(originalFolderPath, downloadFolderPath, "smallwmv2.wmv");
-                AssertDownloadedFile(originalFolderPath, downloadFolderPath, "dummy.ism");
+                AssertDownloadedFile(originalFolderPath, downloadFolderPath, @"Media\smallwmv1.wmv");
+                AssertDownloadedFile(originalFolderPath, downloadFolderPath, @"Media\smallwmv2.wmv");
+                AssertDownloadedFile(originalFolderPath, downloadFolderPath, @"Media\dummy.ism");
 
                 this.context = TestHelper.CreateContext();
                 Assert.AreEqual(0, this.context.Locators.Where(l => l.AssetId == assetId).Count());
@@ -458,9 +458,9 @@ namespace MediaServices.Client.Extensions.Tests
                 Assert.AreEqual(3, downloadResults.Count);
                 Assert.AreEqual(3, Directory.GetFiles(downloadFolderPath).Length);
 
-                AssertDownloadedFile(originalFolderPath, downloadFolderPath, "smallwmv1.wmv", downloadResults["smallwmv1.wmv"]);
-                AssertDownloadedFile(originalFolderPath, downloadFolderPath, "smallwmv2.wmv", downloadResults["smallwmv2.wmv"]);
-                AssertDownloadedFile(originalFolderPath, downloadFolderPath, "dummy.ism", downloadResults["dummy.ism"]);
+                AssertDownloadedFile(originalFolderPath, downloadFolderPath, @"Media\smallwmv1.wmv", downloadResults[@"Media\smallwmv1.wmv"]);
+                AssertDownloadedFile(originalFolderPath, downloadFolderPath, @"Media\smallwmv2.wmv", downloadResults[@"Media\smallwmv2.wmv"]);
+                AssertDownloadedFile(originalFolderPath, downloadFolderPath, @"Media\dummy.ism", downloadResults[@"Media\dummy.ism"]);
 
                 this.context = TestHelper.CreateContext();
                 Assert.AreEqual(0, this.context.Locators.Where(l => l.AssetId == assetId).Count());
@@ -490,7 +490,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\smallwmv1.wmv")]
         public void ShouldGetManifestAssetFileReturnNullIfThereIsNoManifestFile()
         {
-            this.asset = this.context.Assets.CreateFromFile("smallwmv1.wmv", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\smallwmv1.wmv", AssetCreationOptions.None);
 
             var manifestAssetFile = this.asset.GetManifestAssetFile();
 
@@ -510,7 +510,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetSmoothStreamingUri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -527,7 +527,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetHlsUri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -544,7 +544,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetHlsv3Uri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -561,7 +561,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetMpegDashUri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 

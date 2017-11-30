@@ -61,7 +61,7 @@ namespace MediaServices.Client.Extensions.Tests
         {
             CapacityBasedAccountSelectionStrategy strategy = CapacityBasedAccountSelectionStrategy.FromAccounts(context, true);
 
-            string inputAssetFilePath = Path.Combine(TestContext.TestDeploymentDir, smallWmv);
+            string inputAssetFilePath = Path.Combine(Directory.GetCurrentDirectory(), smallWmv);
             string inputAssetFileName = Path.GetFileName(inputAssetFilePath);
 
             this.inputAsset = context.Assets.Create("InputAsset", strategy, AssetCreationOptions.StorageEncrypted);

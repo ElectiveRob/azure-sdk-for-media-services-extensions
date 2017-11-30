@@ -55,7 +55,7 @@ namespace MediaServices.Client.Extensions.Tests
         {
             try
             {
-                this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+                this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
                 var assetFile = this.asset.AssetFiles.First();
 
@@ -75,7 +75,7 @@ namespace MediaServices.Client.Extensions.Tests
         {
             try
             {
-                this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+                this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
                 var originLocator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -100,7 +100,7 @@ namespace MediaServices.Client.Extensions.Tests
                 var asset2 = this.context.Assets.Create("empty", AssetCreationOptions.None);
                 var sasLocator = this.context.Locators.Create(LocatorType.Sas, asset2, AccessPermissions.Read, TimeSpan.FromDays(1));
 
-                this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+                this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
                 var assetFile = this.asset.AssetFiles.First();
 
                 try
@@ -126,7 +126,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldReturnNullGetAssetFileMetadataIfAssetDoesNotContainMetadataFile()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var assetFile = this.asset.AssetFiles.First();
 
@@ -145,7 +145,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\smallwmv1.wmv")]
         public void ShouldGetAssetFileMetadata()
         {
-            this.asset = this.context.Assets.CreateFromFile("smallwmv1.wmv", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\smallwmv1.wmv", AssetCreationOptions.None);
 
             var job = this.context.Jobs.CreateWithSingleTask(
                 MediaProcessorNames.MediaEncoderStandard,
@@ -214,7 +214,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetSasUri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.Sas, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -256,7 +256,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldThrowGetSasUriWithSpecificLocatorIfLocatorIsNull()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var assetFile = this.asset.AssetFiles.First();
 
@@ -268,7 +268,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldThrowGetSasUriWithSpecificLocatorIfLocatorTypeIsNotSas()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var originLocator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -285,7 +285,7 @@ namespace MediaServices.Client.Extensions.Tests
             var asset2 = this.context.Assets.Create("empty", AssetCreationOptions.None);
             var sasLocator = this.context.Locators.Create(LocatorType.Sas, asset2, AccessPermissions.Read, TimeSpan.FromDays(1));
 
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
             var assetFile = this.asset.AssetFiles.First();
 
             try
@@ -305,7 +305,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetSasUriWithSpecificLocator()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.Sas, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -334,7 +334,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetMediaContext()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var assetFile = this.asset.AssetFiles.First();
 

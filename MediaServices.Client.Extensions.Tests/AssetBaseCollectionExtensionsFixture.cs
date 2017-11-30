@@ -165,12 +165,12 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\smallwmv1.wmv")]
         public void ShouldCreateAssetFromFile()
         {
-            var fileName = "smallwmv1.wmv";
-            this.asset = this.context.Assets.CreateFromFile(fileName, null, AssetCreationOptions.None);
+            var filePath = @"Media\smallwmv1.wmv";
+            this.asset = this.context.Assets.CreateFromFile(filePath, null, AssetCreationOptions.None);
             var assetId = this.asset.Id;
 
             Assert.IsNotNull(this.asset);
-            Assert.AreEqual(fileName, this.asset.Name);
+            Assert.AreEqual("smallwmv1.wmv", this.asset.Name);
 
             var assetFiles = this.asset.AssetFiles.ToList().OrderBy(a => a.Name);
 
@@ -187,12 +187,12 @@ namespace MediaServices.Client.Extensions.Tests
         {
             RandomAccountSelectionStrategy strategy = RandomAccountSelectionStrategy.FromAccounts(this.context);
 
-            var fileName = "smallwmv1.wmv";
-            this.asset = this.context.Assets.CreateFromFile(fileName, strategy, AssetCreationOptions.None, null);
+            var filePath = @"Media\smallwmv1.wmv";
+            this.asset = this.context.Assets.CreateFromFile(filePath, strategy, AssetCreationOptions.None, null);
             var assetId = this.asset.Id;
 
             Assert.IsNotNull(this.asset);
-            Assert.AreEqual(fileName, this.asset.Name);
+            Assert.AreEqual("smallwmv1.wmv", this.asset.Name);
             IList<string> storageAccountNames = strategy.GetStorageAccounts();
             CollectionAssert.Contains((ICollection)storageAccountNames, this.asset.StorageAccountName);
 
@@ -222,16 +222,16 @@ namespace MediaServices.Client.Extensions.Tests
                     uploadResults.AddOrUpdate(assetFile.Name, eventArgs, (k, e2) => eventArgs);
                 };
 
-            var fileName = "smallwmv1.wmv";
-            this.asset = this.context.Assets.CreateFromFile(fileName, AssetCreationOptions.None, uploadProgressChangedCallback);
+            var filePath = @"Media\smallwmv1.wmv";
+            this.asset = this.context.Assets.CreateFromFile(filePath, AssetCreationOptions.None, uploadProgressChangedCallback);
             var assetId = this.asset.Id;
 
             Assert.IsNotNull(this.asset);
-            Assert.AreEqual(fileName, this.asset.Name);
+            Assert.AreEqual("smallwmv1.wmv", this.asset.Name);
 
             Assert.AreEqual(1, uploadResults.Count);
 
-            AssertUploadedFile(".\\", fileName, uploadResults[fileName]);
+            AssertUploadedFile(".\\Media", "smallwmv1.wmv", uploadResults["smallwmv1.wmv"]);
 
             var assetFiles = this.asset.AssetFiles.ToList().OrderBy(a => a.Name);
 
@@ -308,21 +308,21 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\smallwmv1.wmv")]
         public void ShouldCreateAssetFromBlob()
         {
-            var fileName = "smallwmv1.wmv";
+            var filePath = @"Media\smallwmv1.wmv";
             var containerName = "createassetfromblobtest-" + Guid.NewGuid();
             var blobClient = TestHelper.CreateCloudBlobClient();
             this.container = blobClient.GetContainerReference(containerName);
 
-            var sourceBlob = CreateBlobFromFile(this.container, fileName);
+            var sourceBlob = CreateBlobFromFile(this.container, filePath);
             this.asset = this.context.Assets.CreateFromBlob(sourceBlob, blobClient.Credentials, AssetCreationOptions.None);
 
             Assert.IsNotNull(this.asset);
-            Assert.AreEqual(fileName, this.asset.Name);
+            Assert.AreEqual("smallwmv1.wmv", this.asset.Name);
 
             var assetFiles = this.asset.AssetFiles.ToList().OrderBy(a => a.Name);
 
             Assert.AreEqual(1, assetFiles.Count());
-            Assert.AreEqual(fileName, assetFiles.ElementAt(0).Name);
+            Assert.AreEqual("smallwmv1.wmv", assetFiles.ElementAt(0).Name);
             Assert.IsTrue(assetFiles.ElementAt(0).IsPrimary);
             Assert.AreEqual(sourceBlob.Properties.Length, assetFiles.ElementAt(0).ContentFileSize);
             Assert.AreEqual(sourceBlob.Properties.ContentType, assetFiles.ElementAt(0).MimeType);
@@ -333,7 +333,7 @@ namespace MediaServices.Client.Extensions.Tests
         [ExpectedException(typeof(AggregateException))]
         public void ShouldThrowCreateAssetFromBlobIfAssetCollectionIsNull()
         {
-            var fileName = "smallwmv1.wmv";
+            var fileName = @"Media\smallwmv1.wmv";
             var containerName = "createassetfromblobtest-" + Guid.NewGuid();
             var blobClient = TestHelper.CreateCloudBlobClient();
             this.container = blobClient.GetContainerReference(containerName);
@@ -374,7 +374,7 @@ namespace MediaServices.Client.Extensions.Tests
         [ExpectedException(typeof(AggregateException))]
         public void ShouldThrowCreateAssetFromBlobIfStorageCredentialsIsNull()
         {
-            var fileName = "smallwmv1.wmv";
+            var fileName = @"Media\smallwmv1.wmv";
             var containerName = "createassetfromblobtest-" + Guid.NewGuid();
             var blobClient = TestHelper.CreateCloudBlobClient();
             this.container = blobClient.GetContainerReference(containerName);
@@ -397,7 +397,7 @@ namespace MediaServices.Client.Extensions.Tests
         [ExpectedException(typeof(AggregateException))]
         public void ShouldThrowCreateAssetFromBlobIfStorageCredentialsIsAnonymous()
         {
-            var fileName = "smallwmv1.wmv";
+            var fileName = @"Media\smallwmv1.wmv";
             var containerName = "createassetfromblobtest-" + Guid.NewGuid();
             var blobClient = TestHelper.CreateCloudBlobClient();
             this.container = blobClient.GetContainerReference(containerName);
@@ -420,7 +420,7 @@ namespace MediaServices.Client.Extensions.Tests
         [ExpectedException(typeof(AggregateException))]
         public void ShouldThrowCreateAssetFromBlobIfStorageCredentialsIsSAS()
         {
-            var fileName = "smallwmv1.wmv";
+            var fileName = @"Media\smallwmv1.wmv";
             var containerName = "createassetfromblobtest-" + Guid.NewGuid();
             var blobClient = TestHelper.CreateCloudBlobClient();
             this.container = blobClient.GetContainerReference(containerName);
@@ -523,9 +523,9 @@ namespace MediaServices.Client.Extensions.Tests
 
             Assert.AreEqual(3, uploadResults.Count);
 
-            AssertUploadedFile(folderName, "smallwmv1.wmv", uploadResults["smallwmv1.wmv"]);
-            AssertUploadedFile(folderName, "smallwmv2.wmv", uploadResults["smallwmv2.wmv"]);
-            AssertUploadedFile(folderName, "dummy.ism", uploadResults["dummy.ism"]);
+            AssertUploadedFile(folderName, @"Media\smallwmv1.wmv", uploadResults[@"Media\smallwmv1.wmv"]);
+            AssertUploadedFile(folderName, @"Media\smallwmv2.wmv", uploadResults[@"Media\smallwmv2.wmv"]);
+            AssertUploadedFile(folderName, @"Media\dummy.ism", uploadResults[@"Media\dummy.ism"]);
 
             var assetFiles = this.asset.AssetFiles.ToList().OrderBy(a => a.Name);
 
@@ -558,7 +558,7 @@ namespace MediaServices.Client.Extensions.Tests
 
             if (this.container != null)
             {
-                this.container.Delete();
+                this.container.DeleteAsync().Wait();
             }
         }
 
@@ -571,12 +571,12 @@ namespace MediaServices.Client.Extensions.Tests
             Assert.AreEqual(100, uploadProgressChangedEventArgs.Progress);
         }
 
-        private static CloudBlockBlob CreateBlobFromFile(CloudBlobContainer container, string fileName)
+        private static CloudBlockBlob CreateBlobFromFile(CloudBlobContainer container, string filePath)
         {
-            container.CreateIfNotExists();
+            container.CreateIfNotExistsAsync().Wait();
 
-            var blob = container.GetBlockBlobReference(fileName);
-            blob.UploadFromFile(fileName, FileMode.Open);
+            var blob = container.GetBlockBlobReference(Path.GetFileName(filePath));
+            blob.UploadFromFileAsync(filePath).Wait();
 
             return blob;
         }

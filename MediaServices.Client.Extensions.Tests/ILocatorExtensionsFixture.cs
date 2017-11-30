@@ -29,7 +29,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetSmoothStreamingUri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -46,7 +46,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetHlsUri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -63,7 +63,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetHlsv3Uri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -80,7 +80,7 @@ namespace MediaServices.Client.Extensions.Tests
         [DeploymentItem(@"Media\dummy.ism")]
         public void ShouldGetMpegDashUri()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.OnDemandOrigin, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
@@ -107,7 +107,7 @@ namespace MediaServices.Client.Extensions.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void ShouldThrowGetStreamingUriIfLocatorTypeIsNotOrigin()
         {
-            this.asset = this.context.Assets.CreateFromFile("dummy.ism", AssetCreationOptions.None);
+            this.asset = this.context.Assets.CreateFromFile(@"Media\dummy.ism", AssetCreationOptions.None);
 
             var locator = this.context.Locators.Create(LocatorType.Sas, this.asset, AccessPermissions.Read, TimeSpan.FromDays(1));
 
